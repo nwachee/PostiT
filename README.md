@@ -28,7 +28,7 @@ MONGO_URI
  - `/api/v1/comments`
 
 
-- Database Schema : https://dbdesigner.page.link/4vy5rLc9SY2LGKeX8
+- Database Schema : 
 
 - API Documentation : 
 
