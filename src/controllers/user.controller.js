@@ -98,7 +98,7 @@ class UserController {
             message: 'User not found'
         })
 
-        //delete room 
+        //delete user 
         await UserService.delete(id)
 
         return res.status(200).json({
