@@ -1,12 +1,16 @@
 const UserService = require('../services/user.service')
+const avatarController = require('./avatar.controller')
 
 class UserController {
 
     //create a User
     async createUser(req, res){
 
+         //get the diceapi link
+         const avatar = await avatarController (req.body.email)
+        // console.log(avatar)
         const data = req.body;
-        console.log(data)
+        // console.log(data)
 
         //check for existing user
         if(await UserService.fetchOne({ email: data.email.toLowerCase()})){
@@ -16,8 +20,15 @@ class UserController {
             })
         }
 
-        //else create user
-        const newUser = await UserService.create(data);
+        //else create a new user 
+        const newUser = await UserService.create({
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone: req.body.phone,
+            username: req.body.username,
+            password: req.body.password,
+            avatarUrl: avatar
+        });
 
         res.status(201).json({
             success: true,
