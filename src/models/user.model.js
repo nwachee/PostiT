@@ -31,6 +31,9 @@ const userSchema = new mongoose.Schema({
 		required: [true, 'Please enter password'],
 		minLength: 8,
 		select: false,
+	},
+	avatarUrl: {
+		type: String
 	}
 },
 
@@ -65,5 +68,6 @@ userSchema.methods.correctPassword = async function (
 ) {
 	return await bcrypt.compare(candidatePassword, userPassword);
 };
+
 
 module.exports = mongoose.model('user', userSchema);
