@@ -16,9 +16,14 @@ class UserService {
         return await userModel.findByIdAndDelete(id)
     }
 
-    //Get a single user
-    async fetchOne(filter){
+    //Get a single user by id
+    async fetchById(filter){
         return await userModel.findById(filter)
+    }
+
+    //Get a single user 
+    async fetchOne(filter){
+        return await userModel.findOne(filter)
     }
 
     //Get All users

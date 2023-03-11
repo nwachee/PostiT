@@ -9,7 +9,7 @@ class UserController {
         console.log(data)
 
         //check for existing user
-        if(await UserService.fetchOne({email: data.email.toLowerCase()})){
+        if(await UserService.fetchOne({ email: data.email.toLowerCase()})){
             res.status(403).json({
                 success: false,
                 message: 'User Already Exists'
@@ -26,9 +26,9 @@ class UserController {
         })
     }
 
-    //Get a Single User
+    //Get a Single by Id
     async findUser(req, res){
-        const user = await UserService.fetchOne(req.params.id)
+        const user = await UserService.fetchById(req.params.id)
 
         if(!user) return res.status(404).json({
             success: false,
@@ -59,27 +59,30 @@ class UserController {
     async updateUser(req, res){
         const id = req.params.id;
         const updateData = req.body;
-        const user = await UserService.fetchOne(id);
+        const user = await UserService.fetchById(id);
 
-        //check for duplicates
+        //check user
         if(!user) res.status(403).json({
             success: false,
             message: 'User to update not found'
         })
 
+        //check for existing user 
         if(updateData.email){
-            const userUpdate = await UserService.fetchOne({ email: updateData.email })
-
-            if(userUpdate._id.toString() !== userUpdate._id.toString()){
+            const userUpdate = await UserService.fetchOne({ email: updateData.email.toLowerCase()})
+            if(userUpdate){
+                if(userUpdate._id.toString() !== id){
                 res.status(403).json({
                     success: false,
-                    message: 'User Email already exists'
+                    message: 'User already exists'
                 })
             }
+            }
+            
         }
 
         //update user
-        const updatedData = await userService.update(roomId, updateData)
+        const updatedData = await UserService.update(id, updateData)
         res.status(200).json({
             success: true,
             message: 'User updated successfully',
@@ -91,7 +94,7 @@ class UserController {
         const id = req.params.id;
 
          //check if user exits before updating
-         const checkUser = await UserService.fetchOne({ _id: id })
+         const checkUser = await UserService.fetchById({ _id: id })
 
         if(!checkUser) return res.status(404).json({
             success: false,
