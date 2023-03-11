@@ -18,6 +18,11 @@ class postService {
 
     //Get a single post
     async fetchOne(filter){
+        return await postModel.findOne(filter)
+    }
+
+    //Get a single post by id
+    async fetchById(filter){
         return await postModel.findById(filter)
     }
 

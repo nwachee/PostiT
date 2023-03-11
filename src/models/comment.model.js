@@ -7,7 +7,7 @@ const commentSchema = new mongoose.Schema({
     },
     postId: {
         type: [
-            {type: Schema.Types.ObjectId, ref: 'post'}
+            {type: mongoose.Schema.Types.ObjectId, ref: 'post'}
           ],
         trim : true,
     }

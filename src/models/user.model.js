@@ -54,8 +54,16 @@ userSchema.pre('save', function (next) {
 	if (!this.isModified('password') || this.isNew) {
 		return next();
 	}
-	this.passwordChangedAt = Date.now() - 1000;
+	this.passwordChangedAt = Date.now() - 1000; 
 	next();
 });
+
+//this creates a function available to all users used to compare user password to another
+userSchema.methods.correctPassword = async function (
+	candidatePassword,
+	userPassword
+) {
+	return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 module.exports = mongoose.model('user', userSchema);

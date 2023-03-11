@@ -3,15 +3,15 @@ const postService = require('../services/post.service')
 class postController{
      //create a post
      async createpost(req, res){
-
+        const id = req.params.id;
         const data = req.body;
         console.log(data)
 
         //check for existing post
-        if(await postService.fetchOne({postname: data.postname.toLowerCase()})){
+        if(await postService.fetchById(id)){
             res.status(403).json({
                 success: false,
-                message: 'post Already Exists'
+                message: 'Post Already Exists'
             })
         }
 
@@ -25,9 +25,9 @@ class postController{
         })
     }
 
-    //Get a Single post
+    //Get a Single post by id
     async findpost(req, res){
-        const post = await postService.fetchOne(req.params.id)
+        const post = await postService.fetchById(req.params.id)
 
         if(!post) return res.status(404).json({
             success: false,
@@ -68,13 +68,16 @@ class postController{
 
         if(updateData.postname){
             const postUpdate = await postService.fetchOne({ postname: updateData.postname })
-
-            if(postUpdate._id.toString() !== postUpdate._id.toString()){
+            
+            if(postUpdate){
+                 if(postUpdate._id.toString() !== id){
                 res.status(403).json({
                     success: false,
                     message: 'post already exists'
                 })
             }
+            }
+           
         }
 
         //update post
