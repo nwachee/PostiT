@@ -5,7 +5,7 @@ class postController{
      async createpost(req, res){
         const id = req.params.id;
         const data = req.body;
-        console.log(data)
+        // console.log(data)
 
         //check for existing post
         if(await postService.fetchById(id)){
