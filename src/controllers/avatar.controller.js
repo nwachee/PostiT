@@ -1,3 +1,4 @@
+//Array of different avatar Styles
 const avatarStyles = [
     'adventurer',
     'adventurer-neutral',
@@ -26,6 +27,7 @@ const avatarStyles = [
     'thumbs'
    ];
 
+   //function to get a random style
    const getRandomAvatarStyle = () => {
     //get the array length
     const aLength = avatarStyles.length
@@ -37,7 +39,7 @@ const avatarStyles = [
 
    }
    
-   
+   //generating a random avatar
    const generateRandomAvatar = async(email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

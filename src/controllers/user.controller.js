@@ -6,7 +6,7 @@ class UserController {
     //create a User
     async createUser(req, res){
 
-         //get the diceapi link
+         //get the avatar link
          const avatar = await avatarController (req.body.email)
         // console.log(avatar)
         const data = req.body;
