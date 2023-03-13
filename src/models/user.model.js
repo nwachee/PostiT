@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const { softDeletePlugin } = require('soft-delete-plugin-mongoose');
 
 const userSchema = new mongoose.Schema({
 	fullname: {
@@ -69,5 +70,8 @@ userSchema.methods.correctPassword = async function (
 	return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+
+//Adding the Soft Delete Plugin
+userSchema.plugin(softDeletePlugin);
 
 module.exports = mongoose.model('user', userSchema);

@@ -1,4 +1,5 @@
 const commentService = require('../services/comment.service')
+const commentModel = require('../models/comment.model')
 
 class commentController {
     //create a comment
@@ -109,6 +110,54 @@ class commentController {
             data: checkcomment
         })
     }
+
+     // returns the number of softDeleted elements 
+     async softDelete (req, res, next)  {
+        const { id, comment } = req.params;
+        const numberDeletedElements = await commentModel.softDelete({
+            _id: id, 
+            comment: comment
+        })
+        .catch((err) => {
+            res.status(400).json({message: err.message});
+        });
+        res.status(200).send(numberDeletedElements);
+    };
+    
+    // returns the number of restores elements 
+     async restoreDeleted (req, res, next) {
+        //get comment id
+        const { id } = req.params;
+        const numberRestoredElements = await commentModel.restore({
+             _id: id,
+              comment: comment 
+            })
+        .catch((err) => {
+            res.status(400).json({message: err.message});
+        });
+        res.status(200).send(numberRestoredElements);
+    };
+    
+    // returns all deleted elements 
+     async findDeleted (req, res, next) {
+    
+        const deletedElements = await commentModel.findDeleted()
+        .catch((err) => {
+            res.status(400).json({message: err.message});
+        });
+        res.status(200).send(deletedElements);
+    };
+    
+    
+    // returns all available elements (not deleted)
+     async findAvailable(req, res, next) {
+    
+        const availableElements = await commentModel.find()
+        .catch((err) => {
+            res.status(400).json({message: err.message});
+        });
+        res.status(200).send(availableElements);
+    };
 }
 
 module.exports = new commentController()
