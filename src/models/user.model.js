@@ -35,6 +35,9 @@ const userSchema = new mongoose.Schema({
 	},
 	avatarUrl: {
 		type: String
+	},
+	imageTag: {
+		type: String
 	}
 },
 
