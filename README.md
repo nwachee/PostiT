@@ -15,6 +15,7 @@ MONGO_URI
     [ POST: create a new user]  `/api/v1/users`
     [ GET: get all users]  `/api/v1/users`
     [ GET: get a single user] `/api/v1/users/<id>`
+    [ GET: get a single user by username] `/api/v1/users/@:username`
     [ PUT: update or replace users] `/api/v1/users/<id>`
     [ DELETE: delete a user] `/api/v1/users/<id>`
 
@@ -40,5 +41,5 @@ MONGO_URI
 
 - API Documentation : https://documenter.getpostman.com/view/23369669/2s93JrvjHv
 
-- API Live Link : 
+- API Live Link : https://postee.onrender.com
 
