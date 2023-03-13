@@ -3,6 +3,7 @@ const dotenv = require('dotenv')
 dotenv.config({ path: './.env' })
 const connectDB = require('./DB/connect');
 const rootRoute = require('./routes/index.route')
+const errorHandler = require('./middleware/error.middleware')
 
 const app = express()
 
@@ -11,6 +12,8 @@ app.use(express.json())
 
 //Root Route
 app.use('/api/v1', rootRoute)
+
+app.use(errorHandler)
 
 
 //creating a port for the server
