@@ -9,7 +9,7 @@ const app = express()
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 
-//Routes
+//Root Route
 app.use('/api/v1', rootRoute)
 
 
