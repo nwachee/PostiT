@@ -32,6 +32,9 @@ MONGO_URI
     [ PUT: update or replace a comment] `/api/v1/comments/<id>`
     [ DELETE: delete a comment] `/api/v1/comments/<id>`
 
+- `/api/v1/docs`
+   [ GET: get API Documentation] `/api/v1/docs`
+
 
 - Database Schema : https://dbdesigner.page.link/4vy5rLc9SY2LGKeX8
 
