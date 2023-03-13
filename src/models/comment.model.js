@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { softDeletePlugin } = require('soft-delete-plugin-mongoose');
 
 const commentSchema = new mongoose.Schema({
     comment: {
@@ -15,5 +16,7 @@ const commentSchema = new mongoose.Schema({
     }
 )
 
+//Adding the Soft Delete Plugin
+commentSchema.plugin(softDeletePlugin);
 
 module.exports = mongoose.model('comment', commentSchema)

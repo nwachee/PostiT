@@ -1,4 +1,5 @@
 const postService = require('../services/post.service')
+const postModel = require('../models/post.model')
 
 class postController{
      //create a post
@@ -109,6 +110,54 @@ class postController{
             data: checkpost
         })
     }
+
+     // returns the number of softDeleted elements 
+     async softDelete (req, res, next)  {
+        const { id, postname } = req.params;
+        const numberDeletedElements = await postModel.softDelete({
+            _id: id, 
+            postname: postname
+        })
+        .catch((err) => {
+            res.status(400).json({message: err.message});
+        });
+        res.status(200).send(numberDeletedElements);
+    };
+    
+    // returns the number of restores elements
+     async restoreDeleted (req, res, next) {
+        //get post id
+        const { id } = req.params;
+        const numberRestoredElements = await postModel.restore({
+             _id: id,
+              postname: postname 
+            })
+        .catch((err) => {
+            res.status(400).json({message: err.message});
+        });
+        res.status(200).send(numberRestoredElements);
+    };
+    
+    // returns all deleted elements
+     async findDeleted (req, res, next) {
+    
+        const deletedElements = await postModel.findDeleted()
+        .catch((err) => {
+            res.status(400).json({message: err.message});
+        });
+        res.status(200).send(deletedElements);
+    };
+    
+    
+    // returns all available elements (not deleted)
+     async findAvailable(req, res, next) {
+    
+        const availableElements = await postModel.find()
+        .catch((err) => {
+            res.status(400).json({message: err.message});
+        });
+        res.status(200).send(availableElements);
+    };
 }
 
 module.exports = new postController()
