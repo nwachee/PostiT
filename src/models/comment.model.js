@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-const { softDeletePlugin } = require('soft-delete-plugin-mongoose');
+import mongoose from 'mongoose';
+import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
 
 const commentSchema = new mongoose.Schema({
-    comment: {
+    name: {
         type: String,
     },
     postId: {
@@ -19,4 +19,4 @@ const commentSchema = new mongoose.Schema({
 //Adding the Soft Delete Plugin
 commentSchema.plugin(softDeletePlugin);
 
-module.exports = mongoose.model('comment', commentSchema)
+export default mongoose.model('comment', commentSchema);
