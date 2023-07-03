@@ -1,11 +1,26 @@
-const express = require('express')
-const dotenv = require('dotenv')
-dotenv.config({ path: './.env' })
-const connectDB = require('./DB/connect');
-const rootRoute = require('./routes/index.route')
-const errorHandler = require('./middleware/error.middleware')
+import express from 'express';
+import { config } from "dotenv"
+config({ path: './config.env' })
+import cors from 'cors';
+import helmet from 'helmet';
+import formData from 'express-form-data';
+import logger from 'morgan';
+import connectDb from './DB/connect.js';
+import rootRoute from './routes/index.route.js';
+import errorHandler from './middleware/error.middleware.js';
 
 const app = express()
+app.use(helmet());
+app.use(formData.parse());
+app.use(logger('dev'));
+app.use(
+  cors({
+    origin: '*',
+    allowedHeaders: 'Content-Type, Authorization',
+    methods: 'POST, GET, PUT, PATCH, DELETE',
+    credentials: true,
+  })
+);
 
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
@@ -17,14 +32,12 @@ app.use(errorHandler)
 
 
 //creating a port for the server
-const port = process.env.PORT || 5500
-const start = (async () => {
-	await connectDB(process.env.MONGO_URI);
+const port = process.env.PORT || 5000
 
-	app.listen(port, () => {
+
+app.listen(port, async () => {
 		console.log(`Server don start for ${port}...`);
+		await connectDb();
 	});
-});
 
-start();
 

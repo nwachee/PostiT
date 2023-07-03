@@ -1,5 +1,5 @@
-const postService = require('../services/post.service')
-const postModel = require('../models/post.model')
+import postService from '../services/post.service.js';
+import postModel from '../models/post.model.js';
 
 class postController{
      //create a post
@@ -213,4 +213,4 @@ class postController{
     };
 }
 
-module.exports = new postController()
+export default new postController();
