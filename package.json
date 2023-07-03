@@ -2,10 +2,11 @@
   "name": "postit",
   "version": "1.0.0",
   "description": "Post-it allows you to post anything (text, images, video, and/or audio) on a single post-it.",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "start" : "node src/app.js"
   },
   "repository": {
     "type": "git",
@@ -18,10 +19,14 @@
   },
   "homepage": "https://github.com/nwachee/PostiT#readme",
   "devDependencies": {
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "joi": "^17.8.3",
     "mongoose": "^7.0.1",
-    "nodemon": "^2.0.21"
+    "nodemon": "^2.0.21",
+    "soft-delete-plugin-mongoose": "^1.0.15",
+    "validator": "^13.9.0"
   }
 }
