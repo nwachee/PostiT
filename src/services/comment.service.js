@@ -1,4 +1,4 @@
-const commentModel = require('../models/comment.model')
+import commentModel from '../models/comment.model.js';
 
 class commentService {
     //Create a comment
@@ -32,4 +32,4 @@ class commentService {
     }
 }
 
-module.exports = new commentService()
+export default new commentService();

@@ -1,35 +1,46 @@
-const userModel = require("../models/user.model")
+import User from '../models/auth.model.js';
+import { HttpException } from '../exceptions/HttpException.js';
+//Create a User
+export const CreateUser = async (input) => {
+        const { email } = input;
+      
+        const user = await User.findOne({ email });
+      
+        if (user) {
+          throw new HttpException(400, `user with email ${email} already exists`);
+        }
+      
+        return await User.create(input);
+ };
 
-class UserService {
-    //Create a User
-    async create(userData){
-        return await userModel.create(userData)
+ //login User
+ export const Login = async (input) => {
+    const { email, password } = input;
+  
+    const user = await User.findOne({ email });
+    if (!user) throw new HttpException(404, `User with email ${email} not found`);
+  
+    const isMatch = await user.matchPassword(password)
+    
+    if (!isMatch) {
+      throw new HttpException(409, 'Invalid Password');
     }
+    return user;
+  };
 
-    //Edit a user
-    async update(id, userUpdate){
-        return await userModel.findByIdAndUpdate(id, userUpdate, {new : true})
+     //Edit a user
+     export const Update = async (id, userUpdate) => {
+        return await User.findByIdAndUpdate(id, userUpdate, {new : true})
     }
-
     //Delete a user
-    async delete(id){
-        return await userModel.findByIdAndDelete(id)
+    export const Delete = async(id) => {
+        return await User.findByIdAndDelete(id)
     }
-
-    //Get a single user by id
-    async fetchById(filter){
-        return await userModel.findById(filter)
+    //Get a single user
+    export const fetchOne = async(filter) => {
+        return await User.findOne(filter)
     }
-
-    //Get a single user 
-    async fetchOne(filter){
-        return await userModel.findOne(filter)
-    }
-
     //Get All users
-    async fetch(filter){
-        return await userModel.find(filter)
+    export const fetchAll = async (filter) => {
+        return await User.find(filter)
     }
-}
-
-module.exports = new UserService()

@@ -1,4 +1,4 @@
-const postModel = require('../models/post.model')
+import postModel from '../models/post.model.js';
 
 class postService {
     //Create a Post
@@ -32,4 +32,4 @@ class postService {
     }
 }
 
-module.exports = new postService()
+export default new postService();

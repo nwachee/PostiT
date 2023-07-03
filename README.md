@@ -1,17 +1,30 @@
 # PostiT
  Post-it allows you to post anything (text, images, video, and/or audio) on a single post-it.
 
-### How to run
-- Clone the repo and open the folder using vscode or any other ide of choice
-- Run npm install in your terminal to install packages in package.json
-- Create a .env file and fill in values for the following variables:
-MONGO_URI
-- Finally run npm start in your terminal
+ ## Tech Stack
+- Node js
+- Express
+- Mongoose
+- dotenv
+- Joi
+- Jsonwebtoken
+- Bcrypt
+- Morgan
+- Cors
+- Helmet
+
+## Installation
+- Clone the [repo](https://github.com/nwachee/PostiT.git) 
+- Run `npm install ` in your terminal to install packages in package.json
+- Create a `.env file` and fill in values for the following variables: - `MONGO_URI`
+- Finally run `npm start` in your terminal
 
 
-### Endpoints
- The following endpoints are available on this server:
- - `/api/v1/users` 
+### Endpoints : 
+- Healthcheck: `/api/v1/healthcheck` 
+    [ GET: Server Health Check ]
+
+ - `user: `
     [ POST: create a new user]  `/api/v1/users`
     [ GET: get all users]  `/api/v1/users`
     [ GET: get a single user] `/api/v1/users/<id>`
@@ -19,21 +32,21 @@ MONGO_URI
     [ PUT: update or replace users] `/api/v1/users/<id>`
     [ DELETE: delete a user] `/api/v1/users/<id>`
 
- - `/api/v1/posts`
+ - `posts: `
     [ POST: create a new post]  `/api/v1/posts`
     [ GET: get all posts] `/api/v1/posts`
     [ GET: get a single post] `/api/v1/posts/<id>`
     [ PUT: update or replace a post] `/api/v1/posts/<id>`
     [ DELETE: delete a post] `/api/v1/posts/<id>`
     
- - `/api/v1/comments`
+ - `comments: `
     [ POST: create a new comment]  `/api/v1/comments`
     [ GET: get all comments] `/api/v1/comments`
     [ GET: get a single comment] `/api/v1/comments/<id>`
     [ PUT: update or replace a comment] `/api/v1/comments/<id>`
     [ DELETE: delete a comment] `/api/v1/comments/<id>`
 
-- `/api/v1/docs`
+- `docs: `
    [ GET: get API Documentation] `/api/v1/docs`
 
 
