@@ -1,35 +1,28 @@
 import { Schema, model } from 'mongoose';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
 
 const userSchema = new Schema({
 	fullname: {
 		type: String,
-		trim: true,
-		required: [true, 'Must provide fullname']
+		required: true
 	},
 	email: {
 		type: String,
 		unique: true,
-		trim: true,
-		required: [true, 'Must have email'],
-		lowercase: true,
+		required: true
 	},
     phone: {
 		type: String,
-		trim: true,
-		required: [true, 'Must provide phone number']
+		required: true
 	},
     username: {
 		type: String,
-		trim: true,
-		required: [true, 'Must provide username']
+		required: true
 	},
 	password: {
 		type: String,
-		required: [true, 'Please enter password'],
-		minLength: 8,
-		select: false,
+		required: true
 	},
 	avatarUrl: {
 		type: String
