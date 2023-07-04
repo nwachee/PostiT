@@ -13,6 +13,14 @@ export const loginUser = Joi.object().keys({
     password: Joi.string().min(8).max(30).required(),
   });
 
+export const userUpdate = Joi.object({
+  fullname: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+  username: Joi.string(),
+  password: Joi.string(),
+})
+
   export const newPost = Joi.object().keys({
     name: Joi.string().required(),
   });
