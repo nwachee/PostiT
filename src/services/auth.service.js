@@ -28,17 +28,23 @@ export const CreateUser = async (input) => {
   };
 
      //Edit a user
-     export const Update = async (id, userUpdate) => {
+     export const updateUser = async (id, userUpdate) => {
         return await User.findByIdAndUpdate(id, userUpdate, {new : true})
     }
     //Delete a user
-    export const Delete = async(id) => {
+    export const deleteUser = async(id) => {
         return await User.findByIdAndDelete(id)
     }
     //Get a single user
     export const fetchOne = async(filter) => {
         return await User.findOne(filter)
     }
+
+     //Get a single user
+     export const fetchById = async(filter) => {
+      return await User.findById(filter)
+  }
+
     //Get All users
     export const fetchAll = async (filter) => {
         return await User.find(filter)
