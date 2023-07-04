@@ -19,9 +19,8 @@ export const CreateUser = async (input) => {
   
     const user = await User.findOne({ email });
     if (!user) throw new HttpException(404, `User with email ${email} not found`);
-  
+
     const isMatch = await user.matchPassword(password)
-    
     if (!isMatch) {
       throw new HttpException(409, 'Invalid Password');
     }

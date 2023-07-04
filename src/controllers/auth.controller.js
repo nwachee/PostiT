@@ -1,46 +1,27 @@
-import userModel from '../models/auth.model.js';
-import * as services from '../services/user.service.js';
+import * as services from '../services/auth.service.js';
 import avatarController from './avatar.controller.js';
 import { generateToken } from '../util/jwt.util.js';
-import { HttpException } from '../exceptions/HttpException.js';
 
-
-    //create a User
-    export const register = async (req, res, next) => {        
-        const data = req.body;
-         //get the avatar link
-         const avatarUrl = await avatarController(req.body.email)
-
-         //create an image tag for the user
-    const imageTag = `<img src= ${avatarUrl}  alt= "Avatar image for ${data.username}" />`
-    try {
-            //check for existing user
-        if(await services.fetchOne({ email: data.email.toLowerCase()})){
-            res.status(403).json({
-                success: false,
-                message: 'User Already Exists'
-            })
-        }
-
-        //else create a new user 
-     const newUser = await services.CreateUser({ ... data, avatarUrl, imageTag });
-            
-            res.status(201).json({
-            success: true,
-            message: 'User created Successfully',
-            data: newUser
-        })
-        } catch (error) {
-            next(error)
-        }
+//create a User
+export const register = async (req, res, next) => {        
+ try {
+const data = req.body;
+ //get the avatar link
+ const avatarUrl = await avatarController(req.body.email)
+ //create an image tag for the user
+ const imageTag = `<img src= ${avatarUrl}  alt= "Avatar image for ${data.username}" />`
+ const newUser = await services.CreateUser({ ... data, avatarUrl, imageTag });    
+res.status(201).json({ 
+    success: true, message: 'User created Successfully', data: newUser })
+} catch (error) {
+ next(error)
+ }
     }
 
     export const login = async (req, res, next) => {
         try {
           const { _id } = await services.Login(req.body);
-      
           const token = generateToken({ _id }, { expiresIn: '5d' });
-      
           res.json({ success: true, message: 'Login Successful', data: token});
         } catch (error) {
           next(error);
@@ -80,7 +61,7 @@ import { HttpException } from '../exceptions/HttpException.js';
     export const findByUsername = async (req, res, next) => {
         try  {
         const username = req.params.username
-            const user = await services.fetchOne({ username: username })
+         const user = await services.fetchOne({ username: username })
 
             if(!user)
             {

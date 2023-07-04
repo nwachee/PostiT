@@ -1,6 +1,5 @@
 import express from 'express';
-import { config } from "dotenv"
-config({ path: './config.env' })
+import 'dotenv/config';
 import cors from 'cors';
 import helmet from 'helmet';
 import formData from 'express-form-data';
@@ -39,5 +38,3 @@ app.listen(port, async () => {
 		console.log(`Server don start for ${port}...`);
 		await connectDb();
 	});
-
-
