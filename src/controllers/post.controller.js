@@ -1,173 +1,70 @@
-import postService from '../services/post.service.js';
-import postModel from '../models/post.model.js';
+import * as services from '../services/post.service.js';
+import Posts from '../models/post.model.js';
 
-class postController{
-     //create a post
-     async createpost(req, res){
-        const id = req.params.id;
-        const data = req.body;
-        // console.log(data)
-
-            try {
-                   //check for existing post
-                if(await postService.fetchById({ _id: id })){
-                    res.status(403).json({
-                        success: false,
-                        message: 'Post Already Exists'
-                    })
-                }
-
-                //else create post
-                const newpost = await postService.create(data);
-
-                res.status(201).json({
-                    success: true,
-                    message: 'post created Successfully',
-                    data: newpost
-                })
-
-            } catch (error){
-                return res.status(403).json({
-                    success: false,
-                    message: error
-                })
-            }
-
+//create a post
+     export const  createPost = async(req, res, next) => {
+        try {
+    const newpost = await services.createPost({ ...req.body, userId: req.user._id});
+    res.status(201).json({ success: true, message: 'post created Successfully', data: newpost })
+     } catch (error){ next(error) }
     }
 
     //Get a Single post by id
-    async findpost(req, res){
-
+    export const getPost = async (req, res, next) => {
         try {
-            const post = await postService.fetchById(req.params.id)
-
-            if(!post) {
-                    return res.status(404).json({
-                    success: false,
-                    message: 'post not found'
-                })
-            } 
-
-            return res.status(200).json({
-                success: true,
-                message: 'post Fetched Successfully',
-                data: post
-            })
-
-        } catch (error){
-            return res.status(403).json({
-                success: false,
-                message: error
-            })
-        }
-
+     const post = await services.fetchById(req.params.id)
+    if(!post) { return res.status(404).json({ success: false, message: 'post not found'})  } 
+     return res.status(200).json({success: true, message: 'post Fetched Successfully', data: post})
+        } 
+        catch (error){ next(error) }
     }
 
     //Get All posts
-    async findposts(req, res){
-
+    export const getAllpost = async(req, res, next) => {
         try {
-            const posts = await postService.fetch()
-
-            return res.status(200).json({
-                success: true,
-                message: 'posts Fetched Successfully',
-                data: posts
-            })
-
-        } catch (error){
-            return res.status(403).json({
-                success: false,
-                message: error
-            })
-        }
-       
+    const posts = await services.fetchAll()
+     return res.status(200).json({ success: true, message: 'posts Fetched Successfully', data: posts })
+        } 
+        catch (error){ next(error) }
     }
 
 
     //Update post
-    async updatepost(req, res){
-        const id = req.params.id;
+     export const updatePost = async(req, res, next) => {
         const updateData = req.body;
-
-        try {
-            const post = await postService.fetchOne({ _id: id});
-
-            //check for duplicates
-            if(!post) {
-                res.status(403).json({
-                success: false,
-                message: 'post to update not found'
-            })
+    try {
+        const post = await services.fetchOne({ _id: req.params.id});
+        //check for duplicates
+    if(!post) { res.status(403).json({ success: false, message: 'post to update not found'}) }
+     if(updateData.postname){
+    const postUpdate = await services.fetchOne({ name: updateData.name })
+     if(postUpdate){
+         if(postUpdate._id.toString() !== id){ res.status(403).json({ success: false, message: 'post already exists' }) } }               
             }
-    
-            if(updateData.postname){
-                const postUpdate = await postService.fetchOne({ postname: updateData.postname })
-                
-                if(postUpdate){
-                     if(postUpdate._id.toString() !== id){
-                    res.status(403).json({
-                        success: false,
-                        message: 'post already exists'
-                    })
-                }
-                }
-               
-            }
-    
-            //update post
-            const updatedData = await postService.update(roomId, updateData)
-            res.status(200).json({
-                success: true,
-                message: 'post updated successfully',
-                data: updatedData 
-            })
-
-        } catch (error){
-            return res.status(403).json({
-                success: false,
-                message: error
-            })
-        } 
+     //update post
+     const updatedData = await services.updatePost(req.params.id, updateData)
+    res.status(200).json({ success: true, message: 'post updated successfully', data: updatedData })
+        }
+        catch (error){ next(error) }
     }
 
-    async deletepost(req, res){
+    export const deletePost = async (req, res, next) => {
         const id = req.params.id;
-
-         //check if post exits before updating
-
-            try {
-                const checkpost = await postService.fetchOne({ _id: id })
-
-                if(!checkpost) {
-                    return res.status(404).json({
-                    success: false,
-                    message: 'post not found'
-                })
-                }
-
-                //delete post 
-                await postService.delete(id)
-
-                return res.status(200).json({
-                    success: true,
-                    message: 'post Deleted Successfully',
-                    data: checkpost
-                })
-
-            } catch (error){
-                return res.status(403).json({
-                    success: false,
-                    message: error
-                })
-            }
-         
+        //check if post exits before updating
+     try {
+ const checkpost = await services.fetchOne({ _id: req.params.id })
+    if(!checkpost) { return res.status(404).json({ success: false, message: 'post not found' }) }
+    //delete post 
+    await services.delete(req.params.id)
+     return res.status(200).json({ success: true, message: 'post Deleted Successfully', data: checkpost })
+            } 
+    catch (error){ next(error) }
     }
 
      // returns the number of softDeleted elements 
-     async softDelete (req, res, next)  {
+     export const softDelete = async (req, res, next)  => {
         const { id, postname } = req.params;
-        const numberDeletedElements = await postModel.softDelete({
+        const numberDeletedElements = await Posts.softDelete({
             _id: id, 
             postname: postname
         })
@@ -178,10 +75,10 @@ class postController{
     };
     
     // returns the number of restores elements
-     async restoreDeleted (req, res, next) {
+    export const restoreDeleted = async(req, res, next) => {
         //get post id
         const { id } = req.params;
-        const numberRestoredElements = await postModel.restore({
+        const numberRestoredElements = await Posts.restore({
              _id: id,
               postname: postname 
             })
@@ -192,25 +89,20 @@ class postController{
     };
     
     // returns all deleted elements
-     async findDeleted (req, res, next) {
-    
-        const deletedElements = await postModel.findDeleted()
+    export const  findDeleted = async (req, res, next) => {
+        const deletedElements = await Posts.findDeleted()
         .catch((err) => {
             res.status(400).json({message: err.message});
         });
         res.status(200).send(deletedElements);
     };
     
-    
     // returns all available elements (not deleted)
-     async findAvailable(req, res, next) {
+    export const  findAvailable = async(req, res, next) => {
     
-        const availableElements = await postModel.find()
+        const availableElements = await Posts.find()
         .catch((err) => {
             res.status(400).json({message: err.message});
         });
         res.status(200).send(availableElements);
     };
-}
-
-export default new postController();
