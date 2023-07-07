@@ -1,166 +1,68 @@
-import commentService from '../services/comment.service.js';
+import * as services from '../services/comment.service.js';
 import commentModel from '../models/comment.model.js';
 
-class commentController {
     //create a comment
-    async createcomment(req, res){
-        const id = req.params.id;
-        const data = req.body;
-        // console.log(data)
-
-        try {
-             //check for existing comment
-            if(await commentService.fetchById(id)){
-                res.status(403).json({
-                    success: false,
-                    message: 'comment Already Exists'
-                })
-            }
-
-            //else create comment
-            const newcomment = await commentService.create(data);
-
-            res.status(201).json({
-                success: true,
-                message: 'comment created Successfully',
-                data: newcomment
-            })
-
-        } catch(error){
-            return res.status(403).json({
-                success: false,
-                message: error
-            })
+    export const createComment = async(req, res, next) => {
+    try {
+     const newcomment = await services.createComment({ ... req.body, post: req.params.id});
+      res.status(201).json({ success: true, message: 'comment created Successfully', data: newcomment })
         }
-
+        catch(error){ next(error) }
     }
 
     //Get a Single comment by id
-    async findcomment(req, res){
-
-        try {
-            const comment = await commentService.fetchById(req.params.id)
-
-            if(!comment) return res.status(404).json({
-                success: false,
-                message: 'comment not found'
-            })
-    
-            return res.status(200).json({
-                success: true,
-                message: 'comment Fetched Successfully',
-                data: comment
-            })
-            
-        } catch(error) {
-            return res.status(403).json({
-                success: false,
-                message: error
-            })
-        }
-      
+    export const getComment = async (req, res, next) => {
+     try {
+     const comment = await services.fetchById(req.params.id)
+    if(!comment) return res.status(404).json({ success: false, message: 'comment not found' })
+    return res.status(200).json({ success: true, message: 'comment Fetched Successfully', data: comment })
+        } 
+        catch(error) { next(error) }
     }
 
     //Get All comments
-    async findcomments(req, res){
-
+     export const getAllcomments = async(req, res, next) => {
         try {
-            const comments = await commentService.fetch()
-
-            return res.status(200).json({
-                success: true,
-                message: 'comments Fetched Successfully',
-                data: comments
-            })
-
-        } catch (error) {
-            return res.status(403).json({
-                success: false,
-                message: error
-            })
-        }
-
+    const comments = await services.fetchAll()
+  return res.status(200).json({ success: true, message: 'comments Fetched Successfully', data: comments })
+        } 
+        catch (error) { next(error) }
     }
-
 
     //Update comment
-    async updatecomment(req, res){
-        const id = req.params.id;
+     export const updateComment = async(req, res, next) => {
         const updateData = req.body;
-
         try {
-                const comment = await commentService.fetchOne(id);
-
-            //check for duplicates
-            if(!comment) {
-                    res.status(403).json({
-                    success: false,
-                    message: 'comment to update not found'
-                })
-            } 
-
-            if(updateData.comment){
-                const commentUpdate = await commentService.fetchOne({ comment: updateData.comment })
-                
-                if(commentUpdate){
-                        if(commentUpdate._id.toString() !== id){
-                        res.status(403).json({
-                            success: false,
-                            message: 'comment already exists'
-                        })
-                    }
+    const comment = await services.fetchOne(req.params.id);
+    //check for duplicates
+    if(!comment) { res.status(403).json({ success: false, message: 'comment to update not found' }) } 
+        if(updateData.comment){
+        const commentUpdate = await services.fetchOne({ name: updateData.name })  
+        if(commentUpdate){
+         if(commentUpdate._id.toString() !== id){ res.status(403).json({ success: false, message: 'comment already exists' }) }
                 }
-            
             }
-
-            //update comment
-            const updatedData = await commentService.update(roomId, updateData)
-            res.status(200).json({
-                success: true,
-                message: 'comment updated successfully',
-                data: updatedData 
-            })
-
-        } catch(error) {
-            return res.status(403).json({
-                success: false,
-                message: error
-            })
-        }
+        //update comment
+     const updatedData = await services.updateComment(roomId, updateData)
+    res.status(200).json({ success: true, message: 'comment updated successfully', data: updatedData })
+     } 
+        catch(error) { next(error) }
     }
 
-    async deletecomment(req, res){
-        const id = req.params.id;
-
+    export const deleteComment = async(req, res, next) => {
         try {
-             //check if comment exits before updating
-            const checkcomment = await commentService.fetchOne({ _id: id })
-
-            if(!checkcomment) return res.status(404).json({
-                success: false,
-                message: 'comment not found'
-            })
-    
-            //delete comment 
-            await commentService.delete(id)
-    
-            return res.status(200).json({
-                success: true,
-                message: 'comment Deleted Successfully',
-                data: checkcomment
-            })
-
-        } catch(error) {
-            return res.status(403).json({
-                success: false,
-                message: error
-            })
-        }
-
+    //check if comment exits before updating
+    const checkcomment = await services.fetchOne({ _id: req.params.id })
+    if(!checkcomment) return res.status(404).json({ success: false, message: 'comment not found'})
+        //delete comment 
+        await services.deleteComment(req.params.id)
+    return res.status(200).json({ success: true, message: 'comment Deleted Successfully', data: checkcomment })
+        } 
+        catch(error) { next(error) }
     }
 
      // returns the number of softDeleted elements 
-     async softDelete (req, res, next)  {
+      export const softDelete = async(req, res, next) => {
         const { id, comment } = req.params;
         const numberDeletedElements = await commentModel.softDelete({
             _id: id, 
@@ -173,7 +75,7 @@ class commentController {
     };
     
     // returns the number of restores elements 
-     async restoreDeleted (req, res, next) {
+      export const restoreDeleted = async (req, res, next)=> {
         //get comment id
         const { id } = req.params;
         const numberRestoredElements = await commentModel.restore({
@@ -187,9 +89,8 @@ class commentController {
     };
     
     // returns all deleted elements 
-     async findDeleted (req, res, next) {
-    
-        const deletedElements = await commentModel.findDeleted()
+     export const findDeleted = async (req, res, next) => {
+    const deletedElements = await commentModel.findDeleted()
         .catch((err) => {
             res.status(400).json({message: err.message});
         });
@@ -198,14 +99,10 @@ class commentController {
     
     
     // returns all available elements (not deleted)
-     async findAvailable(req, res, next) {
-    
-        const availableElements = await commentModel.find()
-        .catch((err) => {
-            res.status(400).json({message: err.message});
+    export const findAvailable = async (req, res, next) => {
+    const availableElements = await commentModel.find()
+    .catch((err) => {
+    res.status(400).json({message: err.message});
         });
-        res.status(200).send(availableElements);
-    };
-}
-
-export default new commentController();
+            res.status(200).send(availableElements);
+        };

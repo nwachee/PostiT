@@ -40,11 +40,11 @@
     [ DELETE: delete a post] `/api/v1/posts/<id>`
     
  - `comments: `
-    [ POST: create a new comment]  `/api/v1/comments`
-    [ GET: get all comments] `/api/v1/comments`
-    [ GET: get a single comment] `/api/v1/comments/<id>`
-    [ PUT: update or replace a comment] `/api/v1/comments/<id>`
-    [ DELETE: delete a comment] `/api/v1/comments/<id>`
+    [ POST: create a new comment]  `/api/v1/posts/<id>/comments`
+    [ GET: get all comments] `/api/v1/posts/<postId>/comments`
+    [ GET: get a single comment] `/api/v1/posts/<id>/comments/<id>`
+    [ PUT: update or replace a comment] `/api/v1/posts/<postId>/comments/<commentId>`
+    [ DELETE: delete a comment] `/api/v1/posts/<id>/comments/<id>`
 
 - `docs: `
    [ GET: get API Documentation] `/api/v1/docs`

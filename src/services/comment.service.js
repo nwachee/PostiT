@@ -1,35 +1,42 @@
-import commentModel from '../models/comment.model.js';
+import Comments from '../models/comment.model.js';
+import Posts from '../models/post.model.js';
+import { HttpException } from '../exceptions/HttpException.js';
 
-class commentService {
+
     //Create a comment
-    async create(commentData){
-        return await commentModel.create(commentData)
+    export const createComment = async(commentData) => {
+        try {
+        const post = await Posts.findOne({ _id: commentData.post})
+        const comment = await Comments.create(commentData)
+        comment?.postId.push(post._id)
+        await comment?.save()
+        } catch (error) {
+    throw new HttpException(500, error.message);            
+        }
     }
 
     //Edit a comment
-    async update(id, commentUpdate){
-        return await commentModel.findByIdAndUpdate(id, commentUpdate, {new : true})
+    export const updateComment = async (id, commentUpdate) => {
+        return await Comments.findByIdAndUpdate(id, commentUpdate, {new : true})
     }
 
     //Delete a comment
-    async delete(id){
-        return await commentModel.findByIdAndDelete(id)
+    export const deleteComment = async(id) => {
+        return await Comments.findByIdAndDelete(id)
     }
 
     //Get a single comment
-    async fetchOne(filter){
-        return await commentModel.findOne(filter)
+    export const fetchOne = async(filter) => {
+        return await Comments.findOne(filter)
     }
 
     //Get a single comment by id
-    async fetchById(filter){
-        return await commentModel.findById(filter)
+    export const fetchById = async(filter) => {
+        return await Comments.findById(filter)
     }
 
     //Get All comments
-    async fetch(filter){
-        return await commentModel.find(filter)
+    export const fetchAll = async(filter) => {
+        return await Comments.find(filter)
     }
-}
 
-export default new commentService();

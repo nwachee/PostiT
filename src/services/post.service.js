@@ -1,35 +1,34 @@
-import postModel from '../models/post.model.js';
+import Posts from '../models/post.model.js';
+import { HttpException } from '../exceptions/HttpException.js';
 
-class postService {
+
     //Create a Post
-    async create(postData){
-        return await postModel.create(postData)
+    export const createPost = async (postData) => {
+    return await Posts.create(postData)  
     }
 
     //Edit a post
-    async update(id, postUpdate){
-        return await postModel.findByIdAndUpdate(id, postUpdate, {new : true})
+    export const updatePost = async (id, postUpdate) => {
+        return await Posts.findByIdAndUpdate(id, postUpdate, {new : true})
     }
 
     //Delete a post
-    async delete(id){
-        return await postModel.findByIdAndDelete(id)
+    export const deletePost = async (id) => {
+        return await Posts.findByIdAndDelete(id)
     }
 
     //Get a single post
-    async fetchOne(filter){
-        return await postModel.findOne(filter)
+   export const fetchOne = async (filter) => {
+        return await Posts.findOne(filter)
     }
 
     //Get a single post by id
-    async fetchById(filter){
-        return await postModel.findById(filter)
+    export const fetchById = async (filter) => {
+        return await Posts.findById(filter)
     }
 
     //Get All posts
-    async fetch(filter){
-        return await postModel.find(filter)
+    export const fetchAll = async (filter) => {
+        return await Posts.find(filter)
     }
-}
 
-export default new postService();

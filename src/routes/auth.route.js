@@ -15,7 +15,7 @@ const router = Router();
 
 router.post('/register', validate(registerUser), register)
 router.post('/login', validate(loginUser), login)
-router.get('/@:username', findByUsername)
+router.get('/@:username', isAuth, findByUsername)
 router.get('/:id', findUser)
 router.patch('/:id', validate(userUpdate), isAuth, updateUser)
 router.get('/', findAllUser)

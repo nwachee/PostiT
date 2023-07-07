@@ -1,16 +1,14 @@
-import mongoose from 'mongoose';
+import {model, Schema} from 'mongoose';
 import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
 
-const postSchema = new mongoose.Schema({
+const postSchema = new Schema({
     name: {
         type: String,
         trim : true,
     },
     userId: {
-        type: [
-            {type: mongoose.Schema.Types.ObjectId, ref: 'user'}
-          ],
-        trim : true,
+        type: Schema.Types.ObjectId, 
+        ref: 'User'
     }
 },
     {
@@ -21,4 +19,5 @@ const postSchema = new mongoose.Schema({
 //Adding the Soft Delete Plugin
 postSchema.plugin(softDeletePlugin);
 
-export default mongoose.model('post', postSchema);
+const Post = model('Post', postSchema);
+export default Post
