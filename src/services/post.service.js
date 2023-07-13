@@ -14,7 +14,7 @@ import { HttpException } from '../exceptions/HttpException.js';
 
     //Delete a post
     export const deletePost = async (id) => {
-        return await Posts.findByIdAndDelete(id)
+        return await Posts.softDelete({  _id: id })
     }
 
     //Get a single post
@@ -30,5 +30,9 @@ import { HttpException } from '../exceptions/HttpException.js';
     //Get All posts
     export const fetchAll = async (filter) => {
         return await Posts.find(filter)
+    }
+
+    export const findDeleted = async() => {
+        return  await Posts.findDeleted()
     }
 

@@ -28,6 +28,14 @@ import Posts from '../models/post.model.js';
         catch (error){ next(error) }
     }
 
+    export const findDeletedPost = async(req, res, next) => {
+        try {
+    const posts = await services.findDeleted()
+     return res.status(200).json({ success: true, message: 'posts Fetched Successfully', data: posts })
+        } 
+        catch (error){ next(error) }
+    }
+
 
     //Update post
      export const updatePost = async(req, res, next) => {
@@ -49,13 +57,12 @@ import Posts from '../models/post.model.js';
     }
 
     export const deletePost = async (req, res, next) => {
-        const id = req.params.id;
         //check if post exits before updating
      try {
  const checkpost = await services.fetchOne({ _id: req.params.id })
     if(!checkpost) { return res.status(404).json({ success: false, message: 'post not found' }) }
     //delete post 
-    await services.delete(req.params.id)
+    await services.deletePost(req.params.id)
      return res.status(200).json({ success: true, message: 'post Deleted Successfully', data: checkpost })
             } 
     catch (error){ next(error) }
@@ -63,10 +70,9 @@ import Posts from '../models/post.model.js';
 
      // returns the number of softDeleted elements 
      export const softDelete = async (req, res, next)  => {
-        const { id, postname } = req.params;
+        const { id } = req.params;
         const numberDeletedElements = await Posts.softDelete({
-            _id: id, 
-            postname: postname
+            _id: id
         })
         .catch((err) => {
             res.status(400).json({message: err.message});
@@ -79,8 +85,7 @@ import Posts from '../models/post.model.js';
         //get post id
         const { id } = req.params;
         const numberRestoredElements = await Posts.restore({
-             _id: id,
-              postname: postname 
+             _id: id
             })
         .catch((err) => {
             res.status(400).json({message: err.message});

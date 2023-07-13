@@ -22,7 +22,7 @@ res.status(201).json({
         try {
           const { _id } = await services.Login(req.body);
           const token = generateToken({ _id }, { expiresIn: '5d' });
-          res.json({ success: true, message: 'Login Successful', data: token});
+          res.json({ success: true, message: 'Login Successful', token: token});
         } catch (error) {
           next(error);
         }
@@ -55,7 +55,7 @@ return res.status(200).json({success: true, message: 'User Fetched Successfully'
     //Get All Users
     export const findAllUser = async (req, res, next) => {
 
-        try {
+      try {
         const users = await services.fetchAll()
  return res.status(200).json({
     success: true, message: 'Users Fetched Successfully',data: users })
@@ -95,6 +95,6 @@ res.status(200).json({success: true,message: 'User updated successfully',data: u
  if(!checkUser) return res.status(404).json({success: false,message: 'User not found'})
   //delete user 
   await services.deleteUser(req.params.id)
-  return res.status(200).json({success: true,message: 'User Deleted Successfully', data: checkUser})}
+  return res.status(200).json({success: true,message: 'User Deleted Successfully'})}
  catch (error) {next(error);}
     }
