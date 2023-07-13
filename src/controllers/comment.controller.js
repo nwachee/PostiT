@@ -56,7 +56,7 @@ import commentModel from '../models/comment.model.js';
     if(!checkcomment) return res.status(404).json({ success: false, message: 'comment not found'})
         //delete comment 
         await services.deleteComment(req.params.id)
-    return res.status(200).json({ success: true, message: 'comment Deleted Successfully', data: checkcomment })
+    return res.status(200).json({ success: true, message: 'comment Deleted Successfully'})
         } 
         catch(error) { next(error) }
     }

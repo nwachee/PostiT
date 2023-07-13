@@ -22,7 +22,7 @@ import { HttpException } from '../exceptions/HttpException.js';
 
     //Delete a comment
     export const deleteComment = async(id) => {
-        return await Comments.findByIdAndDelete(id)
+        return await Comments.softDelete({  _id: id })
     }
 
     //Get a single comment

@@ -33,7 +33,7 @@ export const CreateUser = async (input) => {
     }
     //Delete a user
     export const deleteUser = async(id) => {
-        return await User.findByIdAndDelete(id)
+      return await User.softDelete({  _id: id })
     }
     //Get a single user
     export const fetchOne = async(filter) => {
